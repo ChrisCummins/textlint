@@ -10,7 +10,9 @@ if [[ -z $1 || -z $2 || -z $3 ]]; then
 fi
 
 filename="$1"
-pharovm="$2"
+# The packaged distribution of pharo crashes for me. Instead, use the
+# system install.
+pharovm=pharo
 textlintimage="$3"
 
 cat > textlint.st <<EOF
