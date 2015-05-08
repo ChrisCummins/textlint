@@ -15,17 +15,18 @@ filename="$1"
 pharovm=pharo
 textlintimage="$3"
 
-cat > textlint.st <<EOF
+buffer=$(mktemp /tmp/textlint.XXXX)
+
+cat > "$buffer" <<EOF
 TLConsole checkFileNamed: '$filename' andOutputToFileNamed: 'textlint.log' withinDirectory: '$(pwd)'
 
 EOF
 
-echo
-echo "Please wait while TextLint processes your file: it can take some time..."
-echo
-
 rm -f textlint.log
-"$pharovm" -headless "$textlintimage" $(pwd)/textlint.st
+"$pharovm" -headless "$textlintimage" "$buffer"
+
+rm -f "$buffer"
+
 if [[ ! -e textlint.log ]]; then
     echo Something bad happened!
     exit 1
@@ -33,4 +34,3 @@ else
     cat textlint.log
     exit 0
 fi
-
